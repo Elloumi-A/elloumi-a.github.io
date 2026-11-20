@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amine Elloumi · DevOps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+:root{color-scheme:light dark;
+  --bg:light-dark(#ffffff,#0a1224);--ink:light-dark(#0e1a33,#e6ecfa);--mute:light-dark(#4a5878,#9fb0d3);
+  --soft:light-dark(#eef3fd,#111c35);--line:light-dark(#d5dff3,#24324f);--card:light-dark(#ffffff,#0f1930);
+  --blue:#326ce5;--blue2:light-dark(#1f56c9,#6f9bff);--mint:#21c48f;
+  --hero1:light-dark(#326ce5,#1a3f99);--hero2:light-dark(#1d4fbf,#0d2463)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:Ubuntu,Inter,sans-serif;line-height:1.08;text-wrap:balance;margin:0}
+h2{font-size:clamp(30px,4vw,44px)}h3{font-size:20px;line-height:1.25}
+a{color:var(--blue2)}
+.wrap{max-width:1240px;margin:0 auto}
+.band{padding:clamp(48px,6vw,96px) max(5vw,16px)}
+.band.alt{background:var(--soft)}
+.lead{color:var(--mute);max-width:62ch;margin:12px 0 0}
+.scroll{overflow-x:auto}
+
+/* nav */
+nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--hero2) 92%,transparent);backdrop-filter:blur(10px);color:#fff}
+nav .wrap{display:flex;align-items:center;gap:20px;padding:0 max(5vw,16px);height:60px}
+.brand{display:flex;align-items:center;gap:10px;font:700 17px Ubuntu,sans-serif;color:#fff;text-decoration:none;flex:none}
+.brand svg{width:28px;height:28px}
+nav .links{display:flex;gap:4px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+nav .links a{color:#dfe8ff;text-decoration:none;padding:10px 12px;border-radius:8px;font-size:15px;white-space:nowrap;flex:none}
+nav .links a:hover,nav .links a:focus-visible{background:rgba(255,255,255,.14);color:#fff}
+
+/* hero */
+.hero{background:radial-gradient(1200px 600px at 75% 40%,rgba(255,255,255,.16),transparent 60%),linear-gradient(160deg,var(--hero1),var(--hero2));color:#fff;padding:clamp(40px,6vw,88px) max(5vw,16px) clamp(56px,7vw,104px)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(24px,4vw,64px);align-items:center}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);padding:6px 14px;border-radius:999px;font-size:14px;font-weight:500}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--mint);box-shadow:0 0 0 4px rgba(33,196,143,.25)}
+.hero h1{font-size:clamp(44px,7vw,80px);margin:20px 0 10px;letter-spacing:-.01em}
+.hero .role{font:500 clamp(19px,2.2vw,24px)/1.35 Ubuntu,sans-serif;color:#dbe6ff;margin:0}
+.hero p.sum{color:#e8efff;max-width:56ch;margin:18px 0 0;font-size:17px}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:0 20px;border-radius:10px;font:600 16px Inter,sans-serif;text-decoration:none;border:0;cursor:pointer}
+.btn.pri{background:#fff;color:#1d4fbf}.btn.sec{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.6)}
+.btn:hover{transform:translateY(-1px)}.btn:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--mint);outline-offset:3px}
+.facts{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:26px;color:#d3e0ff;font-size:15px}
+.stage{position:relative;width:min(540px,100%);aspect-ratio:1;margin:0 auto}
+.stage svg.wheel{position:absolute;left:50%;top:50%;width:56%;height:56%;transform:translate(-50%,-50%);cursor:pointer;filter:drop-shadow(0 18px 30px rgba(5,20,70,.45))}
+.ring{position:absolute;inset:8%;border:1.5px dashed rgba(255,255,255,.35);border-radius:50%}
+.node{position:absolute;transform:translate(-50%,-50%);background:#fff;color:#1d3f8f;font:600 14px Inter,sans-serif;padding:7px 13px;border-radius:999px;white-space:nowrap;box-shadow:0 8px 20px rgba(5,20,70,.3);display:flex;align-items:center;gap:7px}
+.node i{width:8px;height:8px;border-radius:50%;background:var(--mint)}
+.hint{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:13px;color:#c9d8ff}
+
+/* projects */
+#projects{position:relative;overflow:hidden}
+#projects>.wrap{position:relative;z-index:1}
+.bgwheel{position:absolute;width:min(820px,110vw);aspect-ratio:1;right:-260px;top:-140px;color:light-dark(rgba(50,108,229,.11),rgba(111,155,255,.12));animation:spin 90s linear infinite;pointer-events:none}
+.bgwheel.sm{width:min(420px,70vw);right:auto;left:-170px;top:auto;bottom:-120px;animation-duration:60s;animation-direction:reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin:28px 0 24px}
+.filters button{min-height:44px;padding:0 18px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:500 15px Inter,sans-serif;cursor:pointer}
+.filters button[aria-pressed=true]{background:var(--blue);border-color:var(--blue);color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr));gap:20px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:0 1px 0 var(--line)}
+.card .meta{display:flex;justify-content:space-between;gap:10px;font-size:14px;color:var(--mute);margin-bottom:10px;flex-wrap:wrap}
+.card p{margin:10px 0 0;color:var(--mute)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.tag{font-size:13px;font-weight:500;padding:4px 10px;border-radius:6px;background:var(--soft);color:var(--blue2);border:1px solid var(--line)}
+.kpis{display:flex;gap:24px;margin-top:16px;flex-wrap:wrap}
+.kpi b{display:block;font:700 30px Ubuntu,sans-serif;color:var(--blue2)}.kpi span{font-size:13px;color:var(--mute)}
+details{margin-top:16px;border-top:1px solid var(--line);padding-top:6px}
+summary{cursor:pointer;min-height:44px;display:flex;align-items:center;gap:8px;font-weight:600;color:var(--blue2);list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"";width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);transition:transform .2s}
+details[open] summary::before{transform:rotate(45deg)}
+details h4{margin:14px 0 6px;font:600 14px Inter,sans-serif;color:var(--ink)}
+details ul{margin:0;padding-left:20px;color:var(--mute)}details li{margin:4px 0}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px}
+.flow span{font-size:13px;font-weight:500;padding:6px 10px;border-radius:8px;background:var(--blue);color:#fff}
+.flow em{font-style:normal;color:var(--mute)}
+
+/* experience timeline */
+.tl{position:relative;margin-top:36px;padding-left:34px}
+.tl::before{content:"";position:absolute;left:10px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.pod{position:relative;margin-bottom:22px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px}
+.pod::before{content:"";position:absolute;left:-31px;top:24px;width:16px;height:16px;border-radius:50%;background:var(--bg);border:3px solid var(--blue)}
+.pod.run::before{border-color:var(--mint);background:var(--mint)}
+.pod header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px}
+.pod .org{color:var(--mute);font-size:15px;margin-top:2px}
+.when{font-size:14px;color:var(--mute);white-space:nowrap;text-align:right}
+.status{display:inline-block;font-size:13px;font-weight:600;padding:2px 10px;border-radius:999px;margin-left:8px;vertical-align:2px}
+.status.r{background:rgba(33,196,143,.15);color:light-dark(#0d8a62,#4fe0b0)}.status.c{background:var(--soft);color:var(--mute)}
+.pod ul{margin:12px 0 0;padding-left:20px;color:var(--mute)}.pod li{margin:5px 0}
+
+/* skills */
+.ns{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));gap:16px;margin-top:32px}
+.ns>div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+.ns h3{font-size:17px;margin-bottom:12px}
+
+/* certs, education, beyond */
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);margin-top:32px}
+.cka{display:flex;gap:20px;align-items:center;background:linear-gradient(150deg,var(--hero1),var(--hero2));color:#fff;border-radius:16px;padding:24px}
+.cka svg{width:76px;height:76px;flex:none}
+.cka b{font:700 22px Ubuntu,sans-serif;display:block}.cka span{display:block;color:#dbe6ff;font-size:15px}
+.list{list-style:none;margin:16px 0 0;padding:0}
+.list li{padding:14px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.list li small{color:var(--mute);font-size:14px;white-space:nowrap}
+.list li div span{display:block;color:var(--mute);font-size:15px}
+.langs{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+.langs div{flex:1 1 120px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.langs b{display:block;font-family:Ubuntu,sans-serif;font-size:18px}.langs span{color:var(--mute);font-size:14px}
+
+/* contact */
+.contact{background:linear-gradient(160deg,var(--hero1),var(--hero2));color:#fff}
+.contact .lead{color:#dbe6ff}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px;margin-top:30px}
+.cgrid>div{background:rgba(40,90,210,.55);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.25);border-radius:14px;padding:18px 20px}
+.ic{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.lab{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.cgrid small{color:#c9d8ff;font-size:14px;display:block}
+.cgrid a,.cgrid b{color:#fff;font-weight:600;overflow-wrap:anywhere;font-size:16px}
+.copy{margin-top:10px;min-height:44px;padding:0 14px;border-radius:8px;border:1px solid rgba(255,255,255,.5);background:transparent;color:#fff;font:500 14px Inter,sans-serif;cursor:pointer}
+footer{text-align:center;padding:22px 16px;font-size:14px;color:var(--mute)}
+
+
+
+/* one connected background for experience → beyond */
+.flowbg{position:relative}
+#fc{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;color:light-dark(#326ce5,#6f9bff)}
+.flowbg .band>.wrap{position:relative;z-index:1}
+/* scroll-driven motion */
+nav::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:calc(var(--sp,0)*100%);background:linear-gradient(90deg,var(--mint),#fff)}
+nav .links a.on{background:rgba(255,255,255,.18);color:#fff}
+.hero .wrap>div:first-child,.stage{will-change:transform}
+.bgwheel{rotate:calc(var(--rot,0)*1deg)}
+.totop{position:fixed;right:20px;bottom:20px;z-index:30;width:56px;height:56px;border-radius:50%;border:0;padding:0;background:transparent;cursor:pointer;opacity:0;transform:translateY(20px) scale(.8);transition:opacity .3s,transform .3s;pointer-events:none;filter:drop-shadow(0 8px 18px rgba(20,50,140,.35))}
+.totop.show{opacity:1;transform:none;pointer-events:auto}
+.totop svg{width:100%;height:100%;rotate:calc(var(--rot,0)*1deg)}
+.totop::after{content:"";position:absolute;inset:-5px;border-radius:50%;background:conic-gradient(var(--mint) calc(var(--sp,0)*360deg),transparent 0);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 0);mask:radial-gradient(farthest-side,transparent calc(100% - 3px),#000 0)}
+.pend{display:inline-flex;align-items:center;gap:7px;align-self:flex-start;font-weight:600;font-size:13px!important;color:light-dark(#9a5b00,#ffc66b)!important;background:light-dark(#fff3dc,rgba(255,180,60,.14));border:1px solid light-dark(#f3d19a,rgba(255,180,60,.35));padding:4px 11px;border-radius:999px}
+.pend i{width:11px;height:11px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:spin 1s linear infinite}
+/* case-study  */
+.more{margin-top:18px;min-height:44px;padding:0 16px;border-radius:10px;border:1.5px solid var(--blue);background:transparent;color:var(--blue2);font:600 15px Inter,sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:background .2s,color .2s}
+.more:hover{background:var(--blue);color:#fff}.more span{transition:transform .2s}.more:hover span{transform:translateX(4px)}
+.spec{display:inline-block;vertical-align:3px;font:600 12px Inter,sans-serif;padding:3px 9px;border-radius:999px;background:light-dark(#fff3dc,rgba(255,180,60,.14));color:light-dark(#9a5b00,#ffc66b)}
+.modal{position:fixed;inset:0;z-index:60;display:none;justify-content:center;align-items:flex-start;padding:4vh 14px;background:rgba(5,14,38,.62);backdrop-filter:blur(5px);overflow-y:auto}
+.modal.open{display:flex}
+.sheet{width:min(900px,100%);background:var(--bg);border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.4);transform:translateY(24px) scale(.98);opacity:0;transition:transform .35s ease,opacity .35s ease}
+.modal.grow .sheet{transform:none;opacity:1}
+body.lock{overflow:hidden}
+.mhead{display:flex;gap:16px;justify-content:space-between;align-items:flex-start;padding:26px clamp(18px,4vw,36px);background:linear-gradient(150deg,var(--hero1),var(--hero2));color:#fff}
+.mhead small{color:#cfdcff;font-size:14px}.mhead h3{font-size:clamp(24px,3.2vw,32px);margin-top:6px}
+.mk{display:flex;gap:26px;flex-wrap:wrap;margin-top:16px}.mk b{display:block;font:700 26px Ubuntu,sans-serif}.mk span{font-size:13px;color:#cfdcff}
+.mclose{flex:none;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);color:#fff;font-size:26px;line-height:1;cursor:pointer}
+.mbody{padding:8px clamp(18px,4vw,36px) 32px}
+.ms{padding-top:22px}.ms h4{font:700 18px Ubuntu,sans-serif;margin:0 0 10px}
+.ms p{margin:0;color:var(--mute);max-width:72ch}.ms ul{margin:0;padding-left:20px;color:var(--mute)}.ms li{margin:5px 0}
+.ms .flow{margin-top:4px}.ms .flow+p{margin-top:12px}
+.steps{list-style:none;margin:0;padding:0 0 0 22px;border-left:2px solid var(--line);counter-reset:s}
+.steps li{position:relative;margin:0 0 16px;padding-left:4px}
+.steps li::before{content:"";position:absolute;left:-30px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--bg);border:3px solid var(--blue)}
+.steps .sh{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}.steps .sh small{color:var(--mute);font-size:13px}
+.steps p{margin-top:4px}
+.bars{margin:6px 0 18px}.bars>small{display:block;color:var(--mute);font-size:14px;margin-bottom:8px}
+.bar{display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:12px;align-items:center;margin:8px 0}
+.bar span{font-weight:600;font-size:15px}.bar b{font-size:14px;white-space:nowrap;min-width:92px;text-align:right}
+.trk{height:14px;border-radius:7px;background:var(--soft);overflow:hidden}
+.trk i{display:block;height:100%;width:0;border-radius:7px;background:light-dark(#9db8f2,#3d5fa8);transition:width 1s cubic-bezier(.2,.8,.2,1) .15s}
+.trk i.best{background:var(--mint)}
+.modal.grow .trk i{width:var(--w)}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}th{font-weight:600;color:var(--mute);font-size:13px}
+tr.top td{background:light-dark(rgba(33,196,143,.1),rgba(33,196,143,.12));font-weight:600}
+@media(max-width:600px){.bar{grid-template-columns:minmax(0,1fr) auto;row-gap:6px}.bar .trk{grid-column:1/-1;grid-row:2}.bar b{min-width:0}}
+/* DevOps loop band */
+.loopband{position:relative;overflow:hidden;background:linear-gradient(170deg,#0f2a6b,#0a1d4d);color:#fff;padding:clamp(48px,6vw,88px) max(5vw,16px)}
+.loopband .lead{color:#c9d8ff}
+.gridfx{position:absolute;inset:-80px;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:44px 44px;animation:gmove 14s linear infinite;-webkit-mask-image:radial-gradient(ellipse at 70% 50%,#000 20%,transparent 70%);mask-image:radial-gradient(ellipse at 70% 50%,#000 20%,transparent 70%)}
+@keyframes gmove{to{transform:translate(44px,44px)}}
+.lgrid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(20px,4vw,56px);align-items:center}
+.now{margin-top:26px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:16px 18px;max-width:420px}
+.now small{display:flex;align-items:center;gap:8px;color:#9fb7ec;font-size:13px}
+.now small::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--mint);animation:blink 1.2s infinite}
+.now b{display:block;font:700 26px Ubuntu,sans-serif;margin-top:4px}.now span{color:#dbe6ff;font-size:15px}
+.infbox{position:relative;width:100%;aspect-ratio:720/300}
+.infbox svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.infdash{animation:dash 3s linear infinite}@keyframes dash{to{stroke-dashoffset:-60}}
+.lobe{fill:rgba(255,255,255,.22);font:700 22px Ubuntu,sans-serif;letter-spacing:.08em}
+.stl{position:absolute;transform:translate(-50%,-50%);font:600 14px Inter,sans-serif;color:#cfdcff;padding:5px 11px;border-radius:999px;background:rgba(10,29,77,.75);border:1px solid rgba(255,255,255,.18);white-space:nowrap;transition:background .3s,color .3s,transform .3s,border-color .3s}
+.stl.on{background:var(--mint);border-color:var(--mint);color:#06281c;transform:translate(-50%,-50%) scale(1.12)}
+@media(max-width:900px){.lgrid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){.stl{font-size:12px;padding:3px 7px}.lobe{font-size:18px}.infbox{width:calc(100% + 24px);margin-inline:-12px}}
+.kp{margin-top:16px;padding:16px 18px;border-radius:12px;background:var(--soft);border:1px solid var(--line)}.kp small{color:var(--mute);font-size:13px}.kp b{display:block;font:700 17px Ubuntu,sans-serif;margin-top:2px}.kp p{margin:6px 0 0;color:var(--mute);font-size:15px}.kp .more{margin-top:12px}
+/* certifications */
+.ch{margin:40px 0 0}
+.certs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:14px;margin-top:16px}
+.cert{display:flex;gap:16px;align-items:center;padding:18px;border-radius:14px;background:var(--card);border:1px solid var(--line);color:var(--ink);text-decoration:none;transition:transform .25s,box-shadow .25s,border-color .25s}
+a.cert:hover,a.cert:focus-visible{transform:translateY(-4px);box-shadow:0 14px 30px rgba(30,70,170,.14);border-color:var(--blue)}
+a.cert:focus-visible{outline:3px solid var(--mint);outline-offset:3px}
+.cic{flex:none;width:58px;height:58px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(150deg,var(--hero1),var(--hero2));box-shadow:0 8px 18px rgba(30,70,170,.25)}
+.cic.wip{background:linear-gradient(150deg,var(--hero1),var(--hero2))}
+.cic .terraform-logo{width:38px;height:38px;stroke:none;animation:none}.lab .brand-icon{width:20px;height:20px;flex:none;stroke:none}.cic svg{width:38px;height:38px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
+.cic .fillc{fill:#fff;stroke:none}.cic .faint{stroke:rgba(255,255,255,.45);stroke-dasharray:3 4}
+.ctx b{display:block;font-size:16px;line-height:1.3}.ctx small{display:block;color:var(--mute);font-size:14px;margin-top:2px}
+.cv{display:inline-block;margin-top:10px;font-style:normal;font-weight:600;font-size:14px;color:#fff;background:linear-gradient(150deg,var(--hero1),var(--hero2));padding:5px 13px;border-radius:999px;transition:background .2s,transform .2s}
+a.cert:hover .cv{background:var(--mint);transform:translateX(3px)}
+.ctx .pend{margin-top:8px;font-style:normal}
+.ic-spin{transform-origin:24px 24px;animation:spin 6s linear infinite}
+a.cert:hover .ic-spin{animation-duration:1.2s}
+.ic-check{stroke-dasharray:22;stroke-dashoffset:22;animation:draw 3s ease-in-out infinite}
+@keyframes draw{30%,70%{stroke-dashoffset:0}100%{stroke-dashoffset:-22}}
+.ic-scan{stroke:var(--mint);stroke-width:2;animation:scan 2.4s ease-in-out infinite}
+@keyframes scan{50%{transform:translateY(22px)}}
+.pkt{offset-path:path("M12 14 L24 34 L36 14 Z");animation:route 3s linear infinite}
+@keyframes route{to{offset-distance:100%}}
+.ic-layers .l2{animation:lift 2.4s ease-in-out infinite}.ic-layers .l3{animation:lift 2.4s ease-in-out .3s infinite}
+@keyframes lift{50%{transform:translateY(-3px)}}
+/* extra motion */
+.card,.ns>div,.langs div,.pod{transition:transform .25s ease,box-shadow .25s ease,border-color .25s}
+.card:hover,.ns>div:hover,.langs div:hover,.pod:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(30,70,170,.14);border-color:var(--blue)}
+.rev.in{transition:opacity .6s ease,transform .6s ease,box-shadow .25s,border-color .25s}
+.card.rev.in:hover,.ns>div.rev.in:hover,.pod.rev.in:hover{transform:translateY(-4px)}
+.rev .tag,.rev .flow span{opacity:0;transform:scale(.85)}
+.rev.in .tag,.rev.in .flow span{animation:pop .45s cubic-bezier(.3,1.5,.6,1) forwards;animation-delay:calc(var(--i,0)*60ms + 200ms)}
+@keyframes pop{to{opacity:1;transform:none}}
+.tl::after{content:"";position:absolute;left:10px;top:6px;width:2px;height:calc(var(--p,0)*(100% - 12px));background:linear-gradient(var(--mint),var(--blue));transition:height .15s linear}
+.pod.run::after{content:"";position:absolute;left:-31px;top:24px;width:16px;height:16px;border-radius:50%;border:2px solid var(--mint);animation:ping 1.8s ease-out infinite}
+@keyframes ping{from{transform:scale(1);opacity:.9}to{transform:scale(2.6);opacity:0}}
+.status.r::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:currentColor;margin-right:6px;vertical-align:1px;animation:blink 1.4s ease-in-out infinite}
+@keyframes blink{50%{opacity:.25}}
+.cka{position:relative;overflow:hidden;text-decoration:none;transition:transform .25s,box-shadow .25s}.cka:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(30,70,170,.3)}.cka:focus-visible{outline:3px solid var(--mint);outline-offset:3px}
+.verify{display:inline-block;margin-top:10px;font-style:normal;font-weight:600;font-size:14px;color:#fff;background:rgba(255,255,255,.16);padding:5px 12px;border-radius:999px;transition:background .2s}.cka:hover .verify{background:var(--mint)}
+.cka svg{animation:spin 18s linear infinite}
+.cka::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.28) 50%,transparent 65%);transform:translateX(-100%);animation:shine 4.5s ease-in-out infinite}
+@keyframes shine{60%,100%{transform:translateX(100%)}}
+.list li{transition:padding-left .25s}.list li:hover{padding-left:8px}
+.contact{position:relative;overflow:hidden}.contact>.wrap{position:relative;z-index:1}
+.net{position:absolute;right:-40px;top:-10px;width:min(560px,80vw);height:auto;opacity:.55;pointer-events:none}
+.cgrid>div{transition:transform .25s,background .25s}.cgrid>div:hover{transform:translateY(-4px);background:rgba(255,255,255,.18)}
+.cgrid>div:hover .ic{animation:wiggle .5s ease}
+@keyframes wiggle{30%{transform:rotate(-14deg) scale(1.15)}60%{transform:rotate(10deg) scale(1.15)}}
+h2.rev::after{content:"";display:block;height:4px;width:0;margin-top:14px;border-radius:2px;background:var(--blue);transition:width .8s .2s ease}
+h2.rev.in::after{width:64px}
+.contact h2.rev::after{background:var(--mint)}
+.rev{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}.rev.in{opacity:1;transform:none}
+@media(max-width:900px){.hero .wrap{grid-template-columns:minmax(0,1fr)}.stage{width:min(460px,100%)}.two{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){.stage svg.wheel{width:48%;height:48%}.node{font-size:13px;padding:5px 10px}.when{text-align:left}.hint{display:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important}.rev .tag,.rev .flow span{opacity:1;transform:none}.net{display:none}.gridfx{animation:none}.fxc{display:none}.bgwheel{animation:none}html{scroll-behavior:auto}.rev{opacity:1;transform:none;transition:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="disc" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="#5a8cf2"/><stop offset="1" stop-color="#2556c4"/></radialGradient>
+    <g id="spoke"><rect x="-4" y="-84" width="8" height="66" rx="3" fill="#fff"/><circle cy="-88" r="9" fill="#fff"/></g>
+    <g id="helm">
+      <circle r="98" fill="url(#disc)" stroke="#fff" stroke-width="4"/>
+      <use href="#spoke"/><use href="#spoke" transform="rotate(45)"/><use href="#spoke" transform="rotate(90)"/><use href="#spoke" transform="rotate(135)"/>
+      <use href="#spoke" transform="rotate(180)"/><use href="#spoke" transform="rotate(225)"/><use href="#spoke" transform="rotate(270)"/><use href="#spoke" transform="rotate(315)"/>
+      <circle r="60" fill="none" stroke="#fff" stroke-width="11"/>
+      <circle r="60" fill="none" stroke="#2556c4" stroke-width="2" opacity=".35"/>
+      <circle r="22" fill="none" stroke="#fff" stroke-width="9"/>
+      <circle r="9" fill="#fff"/>
+    </g>
+    <g id="helmline" fill="none" stroke="currentColor" stroke-linecap="round">
+      <circle r="97" stroke-width="3"/>
+      <g stroke-width="6"><line y1="-22" y2="-84"/><line y1="-22" y2="-84" transform="rotate(45)"/><line y1="-22" y2="-84" transform="rotate(90)"/><line y1="-22" y2="-84" transform="rotate(135)"/><line y1="-22" y2="-84" transform="rotate(180)"/><line y1="-22" y2="-84" transform="rotate(225)"/><line y1="-22" y2="-84" transform="rotate(270)"/><line y1="-22" y2="-84" transform="rotate(315)"/></g>
+      <g fill="currentColor" stroke="none"><circle cy="-88" r="8"/><circle cy="-88" r="8" transform="rotate(45)"/><circle cy="-88" r="8" transform="rotate(90)"/><circle cy="-88" r="8" transform="rotate(135)"/><circle cy="-88" r="8" transform="rotate(180)"/><circle cy="-88" r="8" transform="rotate(225)"/><circle cy="-88" r="8" transform="rotate(270)"/><circle cy="-88" r="8" transform="rotate(315)"/></g>
+      <circle r="60" stroke-width="9"/><circle r="22" stroke-width="7"/><circle r="8" fill="currentColor" stroke="none"/>
+    </g>
+  </defs>
+</svg>
+
+<nav aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="#top"><span>Amine Elloumi</span></a>
+    <div class="links">
+      <a href="#ship">How I ship</a><a href="#projects">Projects</a><a href="#experience">Experience</a><a href="#skills">Skills</a><a href="#credentials">Credentials</a><a href="#beyond">Beyond work</a><a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <span class="badge"><span class="dot"></span>Open to DevOps &amp; Cloud roles · relocation OK</span>
+      <h1>Amine Elloumi</h1>
+      <p class="role">Junior DevOps Engineer · Certified Kubernetes Administrator</p>
+      <p class="sum">I automate deployments with GitLab CI/CD, Docker, Kubernetes and Helm, and build monitoring with Prometheus and Grafana. I've deployed cloud projects on Microsoft Azure and benchmarked Kubernetes networking from the ground up.</p>
+      <div class="cta"><a class="btn pri" href="#projects">See my projects</a><a class="btn sec" href="#contact">Get in touch</a><a class="btn sec" href="https://github.com/Elloumi-A" target="_blank" rel="noopener">GitHub</a></div>
+      <div class="facts"><span>Budapest, Hungary</span><span>English · French · Arabic</span></div>
+    </div>
+    <div class="stage" id="stage" aria-label="Animated helm wheel with the tools I use orbiting around it">
+      <div class="ring"></div>
+      <svg class="wheel" id="wheel" viewBox="-100 -100 200 200" role="button" tabindex="0" aria-label="Spin the wheel"><g id="wg"><use href="#helm"/></g></svg>
+      <div class="hint">Click the wheel to scale up</div>
+    </div>
+  </div>
+</header>
+
+<section class="loopband" id="ship" aria-labelledby="shiph">
+  <div class="gridfx" aria-hidden="true"></div>
+  <div class="wrap lgrid">
+    <div>
+      <h2 id="shiph" class="rev">How I ship</h2>
+      <p class="lead">The same loop runs through all my projects: plan in sprints, push to Git, let the pipeline build and release, deploy with Helm, then watch it in Grafana and feed what I learn into the next sprint.</p>
+      <div class="now" aria-live="polite"><small>Now running</small><b id="stg">Plan</b><span id="stt">Scrum sprints, backlog and sprint reviews</span></div>
+    </div>
+    <div class="infbox" id="infbox">
+      <svg viewBox="-60 0 720 300" aria-hidden="true">
+        <defs><linearGradient id="lg" x1="0" x2="1"><stop offset="0" stop-color="#7fa6ff"/><stop offset="1" stop-color="#21c48f"/></linearGradient></defs>
+        <path id="infp" d="M300,150 C220,30 70,30 70,150 C70,270 220,270 300,150 C380,30 530,30 530,150 C530,270 380,270 300,150Z" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="26" stroke-linejoin="round"/>
+        <path d="M300,150 C220,30 70,30 70,150 C70,270 220,270 300,150 C380,30 530,30 530,150 C530,270 380,270 300,150Z" fill="none" stroke="url(#lg)" stroke-width="3" stroke-dasharray="6 9" class="infdash"/>
+        <text x="185" y="156" text-anchor="middle" class="lobe">DEV</text><text x="415" y="156" text-anchor="middle" class="lobe">OPS</text>
+        <g id="pk"></g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="projects">
+  <svg class="bgwheel" viewBox="-100 -100 200 200" aria-hidden="true"><use href="#helmline"/></svg>
+  <svg class="bgwheel sm" viewBox="-100 -100 200 200" aria-hidden="true"><use href="#helmline"/></svg>
+  <div class="wrap">
+    <h2 class="rev">Projects</h2>
+    <p class="lead">Academic research at BME and production pipelines from my internships. Open any card for the architecture and what I did.</p>
+    <div class="filters" role="group" aria-label="Filter projects">
+      <button aria-pressed="true" data-f="all">All</button><button aria-pressed="false" data-f="k8s">Kubernetes &amp; Cloud</button><button aria-pressed="false" data-f="cicd">CI/CD</button><button aria-pressed="false" data-f="data">Data &amp; AI</button>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<div class="flowbg" id="flowbg"><canvas id="fc" aria-hidden="true"></canvas>
+<section class="band alt" id="experience">
+  <div class="wrap">
+    <h2 class="rev">Experience</h2>
+    <p class="lead">Each role as a pod in my rollout history.</p>
+    <div class="tl" id="tl"></div>
+  </div>
+</section>
+
+<section class="band" id="skills">
+  <div class="wrap">
+    <h2 class="rev">Skills, by namespace</h2>
+    <p class="lead">The tools I work with, grouped the way I'd organise a cluster.</p>
+    <div class="ns" id="ns"></div>
+  </div>
+</section>
+
+<section class="band alt" id="credentials">
+  <div class="wrap">
+    <h2 class="rev">Certifications &amp; education</h2>
+    <div class="two">
+      <div>
+        <a class="cka rev" href="https://www.credly.com/badges/bfe83412-a1f3-405b-b16e-c4f2f4163b20/public_url" target="_blank" rel="noopener" aria-label="Certified Kubernetes Administrator, verify on Credly">
+          <svg viewBox="-100 -100 200 200" aria-hidden="true"><use href="#helm"/></svg>
+          <div><b>Certified Kubernetes Administrator</b><span>CKA · cluster setup, workloads, networking, storage, troubleshooting</span><em class="verify">Verify on Credly →</em></div>
+        </a>
+
+      </div>
+      <div>
+        <h3>Education</h3>
+        <ul class="list">
+          <li><div>Master of Computer Science Engineering<span>Budapest University of Technology and Economics · Software Engineering and Smart City</span></div><small>02/2025 – 08/2026</small></li>
+          <li><div>Bachelor's in Computer Science<span>Private North American University · Software development</span></div><small>09/2021 – 07/2024</small></li>
+        </ul>
+      </div>
+    </div>
+    <h3 class="ch">More certifications</h3>
+    <div class="certs" id="certs"></div>
+  </div>
+</section>
+
+<section class="band" id="beyond">
+  <div class="wrap">
+    <h2 class="rev">Beyond the cluster</h2>
+    <p class="lead">Leadership, languages and the things I care about outside of pipelines.</p>
+    <div class="two">
+      <div>
+        <h3>Volunteering</h3>
+        <ul class="list">
+          <li><div>Local Committee Vice President, Incoming Exchanges<span>AIESEC in Hungary · Led the department, managed the team and supported international exchange participants</span></div><small>02/2026 – 09/2026</small></li>
+          <li><div>Vice President of Marketing, Organizing Committee<span>AIESEC in Tunisia · Kept content for events, campaigns and promotions on schedule</span></div><small>09/2022 – 02/2023</small></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Interests</h3>
+        <div class="tags" style="margin-top:16px">
+          <span class="tag">Cloud-native infrastructure</span><span class="tag">Kubernetes networking</span><span class="tag">Observability</span><span class="tag">AI-powered automation</span><span class="tag">Smart cities</span><span class="tag">International teams</span>
+        </div>
+        <h3 style="margin-top:28px">Languages</h3>
+        <div class="langs"><div><b>Arabic</b><span>Native / bilingual</span></div><div><b>French</b><span>Fluent</span></div><div><b>English</b><span>Fluent</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+
+<section class="band contact" id="contact">
+  <svg class="net" viewBox="0 0 600 400" aria-hidden="true">
+    <g stroke="rgba(255,255,255,.35)" stroke-width="1.5" fill="none" stroke-dasharray="4 6">
+      <path id="n1" d="M60 80 L240 140 L420 70 L560 180"/><path id="n2" d="M240 140 L300 300 L520 330"/><path id="n3" d="M420 70 L300 300 L110 260"/>
+    </g>
+    <g fill="#fff"><circle cx="60" cy="80" r="7"/><circle cx="240" cy="140" r="10"/><circle cx="420" cy="70" r="8"/><circle cx="560" cy="180" r="7"/><circle cx="300" cy="300" r="10"/><circle cx="520" cy="330" r="7"/><circle cx="110" cy="260" r="6"/></g>
+    <g fill="#21c48f">
+      <circle r="4.5"><animateMotion dur="6s" repeatCount="indefinite"><mpath href="#n1"/></animateMotion></circle>
+      <circle r="4.5"><animateMotion dur="4.5s" begin="1s" repeatCount="indefinite"><mpath href="#n2"/></animateMotion></circle>
+      <circle r="4.5"><animateMotion dur="5s" begin="2s" repeatCount="indefinite"><mpath href="#n3"/></animateMotion></circle>
+      <circle r="3.5"><animateMotion dur="7s" begin="3s" repeatCount="indefinite"><mpath href="#n1"/></animateMotion></circle>
+    </g>
+  </svg>
+  <div class="wrap">
+    <h2 class="rev">Let's build something reliable</h2>
+    <p class="lead">I'm looking for a DevOps or Cloud Engineering role.</p>
+    <div class="cgrid">
+      <div><div class="lab"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg><small>Email</small></div><a href="mailto:amine.elloumi1@icloud.com">amine.elloumi1@icloud.com</a><br><button class="copy" id="copyMail">Copy email</button></div>
+      <div><div class="lab"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.8l1.4 4.2-2 1.5a12 12 0 0 0 6 6l1.5-2 4.2 1.4v2.8a2 2 0 0 1-2.2 2A17 17 0 0 1 4.6 5.7a2 2 0 0 1 2-2.2z"/></svg><small>Phone</small></div><b>+36 30 230 7956</b></div>
+      <div><div class="lab"><svg class="brand-icon" viewBox="0 0 24 24" role="img" aria-label="LinkedIn logo"><path fill="white" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.35V9h3.414v1.561h.049c.476-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286ZM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124ZM7.119 20.452H3.555V9h3.564v11.452ZM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003Z"/></svg><small>LinkedIn</small></div><a href="https://www.linkedin.com/in/amine-elloumi-profile/">linkedin.com/in/amine-elloumi-profile</a></div>
+      <div><div class="lab"><svg class="brand-icon" viewBox="0 0 24 24" role="img" aria-label="GitHub logo"><path fill="white" d="M12 .297a12 12 0 0 0-3.793 23.386c.6.111.82-.261.82-.577v-2.234c-3.338.726-4.043-1.416-4.043-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.09-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.108-.775.418-1.305.762-1.605-2.665-.304-5.467-1.333-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.536-1.524.118-3.176 0 0 1.008-.323 3.301 1.23a11.52 11.52 0 0 1 6.008 0c2.291-1.553 3.297-1.23 3.297-1.23.656 1.652.244 2.873.12 3.176.77.84 1.235 1.91 1.235 3.221 0 4.61-2.807 5.624-5.48 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.216.694.825.576A12.002 12.002 0 0 0 12 .297Z"/></svg><small>GitHub</small></div><a href="https://github.com/Elloumi-A" target="_blank" rel="noopener">github.com/Elloumi-A</a></div>
+      <div><div class="lab"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0C18.5 15.4 12 21 12 21z"/><circle cx="12" cy="10" r="2.3"/></svg><small>Location</small></div><b>Budapest, Hungary · open to relocation</b></div>
+    </div>
+  </div>
+</section>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mtitle">
+  <div class="sheet"><header class="mhead"><div id="mhead"></div><button class="mclose" id="mclose" aria-label="Close case study">×</button></header><div class="mbody" id="mbody"></div></div>
+</div>
+<button class="totop" id="totop" aria-label="Back to top"><svg viewBox="-100 -100 200 200" aria-hidden="true"><use href="#helm"/></svg></button>
+<footer>© 2026 Amine Elloumi · Built with care, deployed like a pod.</footer>
+
+<script>
+{
+const P=[
+ {id:'asm',c:'cicd k8s',t:'Private Cloud & CI/CD Platform',w:'Final-year project · ASM',d:'02/2024 – 06/2024',
+  s:'Designed and built a company private cloud and an automated release pipeline from scratch: virtualised servers, GitLab CI/CD, a multi-environment Kubernetes cluster and monitoring.',
+  k:[['6','Scrum sprints'],['3','isolated environments']],
+  tags:['Linux','KVM','GitLab CI/CD','Docker','Kubernetes','Helm','Grafana'],
+  sec:[
+   {h:'Overview',p:'Each development team at ASM deployed in its own way. I designed and built a shared platform so every team ships the same way: on infrastructure the company owns, through one automated pipeline, into isolated environments that are monitored.'},
+   {h:'The challenge',list:['Inconsistent server setups and security levels from team to team.','Manual provisioning and scaling, which was slow and error-prone.','Releases handled by hand, with no clean lifecycle for build artifacts.','Capable hardware that was underused, with too little visibility into what was running.']},
+   {h:'My role',p:'I owned the project end to end as a final-year engineering intern, working in Scrum alongside the infrastructure team: research, architecture, implementation and documentation.'},
+   {h:'Architecture',flow:['Code push','GitLab CI/CD','Self-hosted runner','Container image','Private registry','Kubernetes','Helm releases','Monitoring']},
+   {h:'How I delivered it',steps:[
+    ['Research','Sprint 0','Benchmarked Linux distributions and hypervisors, and chose Ubuntu Server LTS and KVM for its performance.'],
+    ['Virtualisation','Sprint 1','Hardened a physical server with key-based SSH and a web admin console, then split it into four KVM virtual machines for the CI runner and the cluster nodes.'],
+    ['Networking','Sprint 2','Set up a bridged network with static addressing, so every virtual machine is reachable on the company network like a physical server.'],
+    ['CI/CD pipeline','Sprint 3','Installed a self-hosted GitLab Runner using Docker. Tagged commits now build the Spring Boot service into a container image and publish it to the private registry automatically. Connected GitLab to the cluster through the GitLab Agent.'],
+    ['Kubernetes & Helm','Sprint 4','Built a cluster (one control plane, two workers) with kubeadm, separated Development, Pre-production and Production namespaces, gave the cluster secure access to the private registry, and deployed MongoDB, the Spring Boot microservices and the Angular front end with Helm charts.'],
+    ['Monitoring','Sprint 5','Added the Kubernetes Dashboard with role-based access, plus InfluxDB and Grafana for live dashboards on cluster health.']]},
+   {h:'Results',list:['One standard, repeatable path from a tagged commit to a running release.','Development, pre-production and production isolated from each other.','Existing hardware put to work: one server now hosts the CI runner and a full Kubernetes cluster.','Live visibility into the cluster through dashboards.']}]},
+
+ {id:'cni',c:'k8s',t:'Kubernetes CNI Benchmarking Study',w:'BME · Research project',d:'05/2025',
+  s:'Measured how three Kubernetes network plugins perform under identical conditions, using a monitoring pipeline I built, so teams can choose one based on data rather than habit.',
+  k:[['3','CNI plugins compared'],['16.9 Gbps','peak pod-to-pod throughput']],
+  tags:['Kubernetes','Calico','Flannel','Canal','Azure','Python','Prometheus','Grafana'],
+  sec:[
+   {h:'Overview',p:'The network plugin (CNI) decides how traffic moves between pods, and it affects every service in a cluster. I compared three popular options, Calico, Flannel and Canal, on throughput and reliability.'},
+   {h:'Approach',list:['Provisioned identical Azure virtual machines and built one Kubernetes cluster per plugin with kubeadm, so the plugin was the only variable.','Generated TCP traffic between pods with iperf3.','Deployed a monitoring stack: Prometheus, Grafana and Node Exporter.','Wrote a Python exporter that turns test results into Prometheus metrics, then containerised it and deployed it to the clusters.']},
+   {h:'Metrics pipeline',flow:['iperf3 test pods','JSON results','Python exporter','Prometheus','Grafana dashboards']},
+   {h:'Results',bars:[{n:'Throughput (Gbps, higher is better)',u:'Gbps',r:[['Calico',10.72],['Flannel',16.52],['Canal',16.90]]},{n:'TCP retransmissions (lower is better)',u:'',r:[['Calico',7168],['Flannel',1829],['Canal',3200]],low:1}],
+    table:{head:['CNI plugin','Throughput (bits/s)','Retransmissions'],rows:[['Calico','10,720,856,051','7,168'],['Flannel','16,516,871,750','1,829'],['Canal','16,897,548,330','3,200']]}},
+   {h:'Recommendation: Calico',p:'On raw numbers in this single-node test, Canal led on throughput and Flannel on reliability. For a production cluster I would still choose Calico: it has the most complete network-policy model of the three, can route without an overlay using BGP, and is widely supported by managed Kubernetes services. Its lower throughput and higher retransmissions here call for tuning rather than ruling it out.'}]},
+
+ {id:'hr',c:'data',t:'Employee Attrition & Salary Prediction',w:'BME · Machine learning project',d:'12/2025',
+  s:'Machine-learning models that flag employees at risk of leaving and estimate fair salaries, so HR can act before people resign.',
+  k:[['0.818','ROC-AUC, attrition'],['0.945','R², salary']],
+  tags:['Python','scikit-learn','Pandas','Random Forest','Gradient Boosting'],
+  sec:[
+   {h:'Overview',p:'HR teams usually find out about attrition only after people leave, and pay decisions can be inconsistent. Using the public IBM HR dataset, I built one model to predict attrition risk and another to estimate monthly salary.'},
+   {h:'Approach',flow:['IBM HR dataset','Cleaning','Feature encoding','Stratified split','Model tuning','Evaluation']},
+   {h:'What made it reliable',list:['Removed salary-derived columns so the salary model couldn\'t take shortcuts.','Handled the imbalance between leavers and stayers with stratified sampling and class weights.','Tuned models with cross-validation, and judged them on recall, F1 and ROC-AUC, not accuracy alone.','Combined Logistic Regression and Random Forest in a soft-voting ensemble.']},
+   {h:'Attrition results',table:{head:['Model','Accuracy','Precision','Recall','F1','ROC-AUC'],rows:[['Logistic Regression','0.752','0.349','0.638','0.451','0.803'],['Random Forest (tuned)','0.844','0.529','0.192','0.281','0.796'],['Ensemble voting','0.847','0.521','0.532','0.526','0.818']],best:2}},
+   {h:'Salary results',table:{head:['Model','MAE','RMSE','R²'],rows:[['Linear Regression','896.07','1,171.41','0.937'],['Random Forest','832.69','1,118.66','0.943'],['Gradient Boosting','798.40','1,096.14','0.945']],best:2}},
+   {h:'Key insight',p:'The tuned Random Forest looked accurate but caught only 19% of leavers. The ensemble kept the accuracy and caught 53%, which makes it far more useful for retention. For salary, Gradient Boosting gave the lowest error.'}]},
+
+ {id:'fin',c:'k8s data',t:'Real-Time Financial Data Visualization',w:'BME project',d:'04/2025',
+  s:'A fully automated cloud pipeline that collects live stock market data and turns it into real-time dashboards, running on Kubernetes on Azure.',
+  tags:['Python','Kubernetes','InfluxDB','Grafana','Azure'],
+  sec:[
+   {h:'Overview',p:'Market data is only useful when it\'s fresh. I built a pipeline that collects, stores and visualises it continuously, with no manual steps.'},
+   {h:'Architecture',flow:['Yahoo Finance API','Python collector','Kubernetes CronJob','InfluxDB','Grafana dashboards']},
+   {h:'What I built',list:['A Python collector that pulls stock market data from the Yahoo Finance API.','Scheduled collection with Kubernetes CronJobs, so data keeps flowing on its own.','Time-series storage in InfluxDB and Grafana dashboards for live trends.','Deployment of the whole system on Microsoft Azure.']}]},
+
+ {id:'ev',c:'data',t:'EV Infrastructure & Adoption Analytics',w:'BME · Business Intelligence',d:'Fall 2025',
+  s:'A Power BI solution design that compares electric-vehicle adoption with charging infrastructure by country, to show where chargers fall behind demand.',
+  tags:['Power BI','Power Query','DAX','Data modelling'],
+  sec:[
+   {h:'Overview',p:'EV sales are growing faster than charging networks, and unevenly: busy city-centre stations next to underused suburban ones. I designed a BI solution that puts demand and supply side by side so investment can go where it\'s needed.'},
+   {h:'Data',list:['Public dataset of EV charging stations: locations, charger types and capacity.','Global EV statistics, 2015–2023: sales, charging points and market share by country.']},
+   {h:'Pipeline',flow:['Public CSV data','Power Query ETL','Merge by region','DAX measures','Power BI dashboard']},
+   {h:'KPIs',list:['EV-to-charger ratio.','Charger density per 1,000 EVs.','Yearly EV adoption rate.','Top 10 under-served regions.']},
+   {h:'Who it helps',p:'Governments, energy providers and carmakers deciding where to invest in charging infrastructure.'}]},
+
+ {id:'deka',c:'cicd',t:'Jenkins Pipelines for Angular & Spring Boot',w:'DekaSOFT internship',d:'08/2023',
+  s:'Automated build, test and deployment for a full-stack application, plus identical development environments for every developer.',
+  tags:['Jenkins','Angular','Spring Boot','Vagrant'],
+  sec:[
+   {h:'Overview',p:'Builds and deployments were manual, and every developer\'s machine was set up differently. I automated delivery and standardised the environments.'},
+   {h:'Pipeline',flow:['Commit','Jenkins','Build','Test','Deploy']},
+   {h:'What I built',list:['Jenkins CI/CD pipelines for the Angular front end and Spring Boot back end, covering build, test and deployment.','Reproducible development and test environments with Vagrant, so everyone works on the same setup.']}]}
+];
+const E=[
+ {r:1,t:'Specialist Talent Partnership Enterprise',o:'Randstad Enterprise · Budapest',d:'04/2026 – Present',b:['Automated repetitive back-office tasks and email workflows with AI tools and prompt engineering.','Designed and ran an internal workshop on practical prompting and using AI in daily work.','Supported HR back-office operations and recruitment workflows for an enterprise client.']},
+ {t:'System Administration & DevOps Intern',o:'ASM · Sfax, Tunisia',d:'02/2024 – 06/2024',b:['Replaced manual releases with an automated GitLab CI/CD pipeline that builds containers and deploys them to Kubernetes with Helm.','Built the company\'s private cloud on KVM virtual machines, making better use of existing servers.','Set up monitoring and dashboards so issues are spotted before they reach users.','Administered and troubleshot Linux servers in physical and virtual environments.'],
+  proj:{id:'asm',t:'Private Cloud & CI/CD Platform',s:'My final-year project at ASM: a private cloud, an automated release pipeline, a Kubernetes cluster with dev, pre-prod and prod environments, and monitoring, delivered over six Scrum sprints.'}},
+ {t:'DevOps Intern',o:'DekaSOFT · Sfax, Tunisia',d:'08/2023',b:['Built Jenkins CI/CD pipelines for Angular and Spring Boot applications, automating build, test and deployment.','Created reproducible development and test environments with Vagrant.']}
+];
+const S=[['Containers & orchestration',['Kubernetes','Docker','Helm']],['CI/CD',['GitLab CI/CD','Jenkins']],['Cloud & IaC',['Microsoft Azure','Terraform','Ansible']],['Monitoring',['Prometheus','Grafana','InfluxDB']],['Languages & tools',['Python','Bash','Git','Linux','Vagrant']],['AI & automation',['Prompt engineering','scikit-learn','Pandas']]];
+const N=['Kubernetes','Docker','Helm','Azure','Prometheus','Grafana','GitLab CI','Terraform','Ansible'];
+
+const grid=document.getElementById('grid');
+grid.innerHTML=P.map(p=>`<article class="card rev" data-c="${p.c}">
+ <div class="meta"><span>${p.w}</span><span>${p.d}</span></div>
+ <h3>${p.t}${p.badge?` <span class="spec">${p.badge}</span>`:''}</h3><p>${p.s}</p>
+ ${p.k?`<div class="kpis">${p.k.map(k=>`<div class="kpi"><b>${k[0]}</b><span>${k[1]}</span></div>`).join('')}</div>`:''}
+ <div class="tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+ <button class="more" data-id="${p.id}">Read case study <span aria-hidden="true">→</span></button></article>`).join('');
+
+const md=document.getElementById('modal'),mb=document.getElementById('mbody'),mh=document.getElementById('mhead');
+let lastFocus=null;
+const sec=x=>{let h=`<section class="ms"><h4>${x.h}</h4>`;
+  if(x.p)h+=`<p>${x.p}</p>`;
+  if(x.list)h+=`<ul>${x.list.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+  if(x.flow)h+=`<div class="flow">${x.flow.map(f=>`<span>${f}</span>`).join('<em>→</em>')}</div>`;
+  if(x.steps)h+=`<ol class="steps">${x.steps.map(st=>`<li><div class="sh"><b>${st[0]}</b><small>${st[1]}</small></div><p>${st[2]}</p></li>`).join('')}</ol>`;
+  if(x.bars)h+=x.bars.map(g=>{const mx=Math.max(...g.r.map(r=>r[1]));const best=g.low?Math.min(...g.r.map(r=>r[1])):mx;
+    return `<div class="bars"><small>${g.n}</small>${g.r.map(r=>`<div class="bar"><span>${r[0]}</span><div class="trk"><i style="--w:${(r[1]/mx*100).toFixed(1)}%" class="${r[1]===best?'best':''}"></i></div><b>${r[1].toLocaleString('en-US')}${g.u?' '+g.u:''}</b></div>`).join('')}</div>`}).join('');
+  if(x.table)h+=`<div class="scroll"><table><thead><tr>${x.table.head.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${x.table.rows.map((r,i)=>`<tr class="${i===x.table.best?'top':''}">${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  return h+'</section>'};
+const openP=id=>{const p=P.find(x=>x.id===id);if(!p)return;lastFocus=document.activeElement;
+  mh.innerHTML=`<small>${p.w} · ${p.d}</small><h3 id="mtitle">${p.t}</h3>${p.k?`<div class="mk">${p.k.map(k=>`<div><b>${k[0]}</b><span>${k[1]}</span></div>`).join('')}</div>`:''}`;
+  mb.innerHTML=p.sec.map(sec).join('')+`<section class="ms"><h4>Stack</h4><div class="tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div></section>`;
+  md.classList.add('open');document.body.classList.add('lock');md.scrollTop=0;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>md.classList.add('grow')));
+  document.getElementById('mclose').focus()};
+const closeP=()=>{md.classList.remove('open','grow');document.body.classList.remove('lock');if(lastFocus)lastFocus.focus()};
+document.addEventListener('click',e=>{const b=e.target.closest('.more');if(b)openP(b.dataset.id)});
+document.getElementById('mclose').addEventListener('click',closeP);
+md.addEventListener('click',e=>{if(e.target===md)closeP()});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&md.classList.contains('open'))closeP()});
+
+document.getElementById('tl').innerHTML=E.map(e=>`<article class="pod rev ${e.r?'run':''}">
+ <header><div><h3>${e.t}<span class="status ${e.r?'r':'c'}">${e.r?'Running':'Completed'}</span></h3><div class="org">${e.o}</div></div><div class="when">${e.d}</div></header>
+ <ul>${e.b.map(x=>`<li>${x}</li>`).join('')}</ul>${e.proj?`<div class="kp"><small>Key project</small><b>${e.proj.t}</b><p>${e.proj.s}</p><button class="more" data-id="${e.proj.id}">Read case study <span aria-hidden="true">→</span></button></div>`:''}</article>`).join('');
+
+document.getElementById('ns').innerHTML=S.map(s=>`<div class="rev"><h3>${s[0]}</h3><div class="tags">${s[1].map(t=>`<span class="tag">${t}</span>`).join('')}</div></div>`).join('');
+
+
+{const C=[
+ {i:'tf',t:'HashiCorp Certified: Terraform Associate',o:'HashiCorp',w:1},
+ {i:'scrum',t:'Scrum Fundamentals Certified',o:'SCRUMstudy',u:'https://www.scrumstudy.com/certification/verify?type=SFC&number=978327'},
+ {i:'shield',t:'Foundations of Cybersecurity',o:'Google · Coursera',u:'https://www.coursera.org/account/accomplishments/verify/B4YEZUCVEH42'},
+ {i:'risk',t:'Play It Safe: Manage Security Risks',o:'Google · Coursera',u:'https://www.coursera.org/account/accomplishments/verify/7YWDQDEAVGQY'},
+ {i:'net',t:'Connect and Protect: Networks and Network Security',o:'Google · Coursera',u:'https://www.coursera.org/account/accomplishments/verify/RCCUDKPL6MX8'}];
+ const IC=/* to use your own icon for a certificate, replace its SVG content here (viewBox 0 0 48 48) */{"tf": "<g class=\"ic-layers\"><path d=\"M24 10 38 17 24 24 10 17Z\"/><path class=\"l2\" d=\"M10 24 24 31 38 24\"/><path class=\"l3\" d=\"M10 31 24 38 38 31\"/></g>", "scrum": "<g class=\"ic-spin\"><path d=\"M36 18a13 13 0 0 0-23-3\"/><path d=\"M13 9v6h6\"/><path d=\"M12 30a13 13 0 0 0 23 3\"/><path d=\"M35 39v-6h-6\"/></g><circle cx=\"24\" cy=\"24\" r=\"3.5\" class=\"fillc\"/>", "shield": "<path d=\"M24 7 37 12v10c0 9-6 15-13 19-7-4-13-10-13-19V12Z\"/><path class=\"ic-check\" d=\"m18 24 4.5 4.5L31 20\"/>", "net": "<path d=\"M12 14 24 34 36 14Z\" class=\"faint\"/><circle cx=\"12\" cy=\"14\" r=\"4\"/><circle cx=\"36\" cy=\"14\" r=\"4\"/><circle cx=\"24\" cy=\"34\" r=\"4\"/><circle r=\"2.6\" class=\"fillc pkt\"/>", "risk": "<path d=\"M24 7 37 12v10c0 9-6 15-13 19-7-4-13-10-13-19V12Z\"/><path d=\"M24 16v9\"/><circle cx=\"24\" cy=\"30\" r=\"1.6\" class=\"fillc\"/><line class=\"ic-scan\" x1=\"12\" x2=\"36\" y1=\"14\" y2=\"14\"/>"};
+ document.getElementById('certs').innerHTML=C.map(c=>{const inner=`<span class="cic ${c.w?'wip':''}">${c.i==='tf'?'<svg class="terraform-logo" viewBox="0 0 24 24" role="img" aria-label="Terraform logo"><path fill="white" d="M1.44 0v7.575L8 11.365V3.787L1.44 0Zm7.28 4.151v7.575l6.56 3.787V7.938L8.72 4.151Zm7.28 3.787v7.575l6.56-3.787V4.151L16 7.938Zm-7.28 4.512v7.575l6.56 3.787v-7.575L8.72 12.45Z"/></svg>':`<svg viewBox="0 0 48 48" aria-hidden="true">${IC[c.i]}</svg>`}</span><span class="ctx"><b>${c.t}</b><small>${c.o}</small>${c.w?'<em class="pend"><i></i>In progress</em>':`<em class="cv">Verify on ${c.o.includes('Coursera')?'Coursera':c.o} →</em>`}</span>`;
+   return c.u?`<a class="cert rev" href="${c.u}" target="_blank" rel="noopener" aria-label="${c.t}, verify credential">${inner}</a>`:`<div class="cert rev wipc">${inner}</div>`}).join('');
+}
+const fb=document.querySelectorAll('.filters button');
+fb.forEach(b=>b.addEventListener('click',()=>{
+  fb.forEach(x=>x.setAttribute('aria-pressed',x===b));
+  const f=b.dataset.f;
+  grid.querySelectorAll('.card').forEach(c=>{c.hidden=!(f==='all'||c.dataset.c.split(' ').includes(f))});
+}));
+
+const cm=document.getElementById('copyMail');
+cm.addEventListener('click',async()=>{try{await navigator.clipboard.writeText('amine.elloumi1@icloud.com');cm.textContent='Copied'}catch(e){cm.textContent='Select the address above to copy'}setTimeout(()=>cm.textContent='Copy email',2200)});
+
+document.querySelectorAll('.tags,.flow').forEach(g=>[...g.querySelectorAll('.tag,span')].forEach((t,i)=>t.style.setProperty('--i',i)));
+const tl=document.getElementById('tl');
+const prog=()=>{const r=tl.getBoundingClientRect(),vh=innerHeight;const p=Math.max(0,Math.min(1,(vh*.75-r.top)/r.height));tl.style.setProperty('--p',p)};
+addEventListener('scroll',prog,{passive:true});addEventListener('resize',prog);prog();
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const revs=document.querySelectorAll('.rev');
+if(reduce||!('IntersectionObserver' in window)){revs.forEach(r=>r.classList.add('in'))}
+else{const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}}),{threshold:.12});revs.forEach(r=>io.observe(r))}
+
+const stage=document.getElementById('stage'),wg=document.getElementById('wg'),wheel=document.getElementById('wheel');
+const nodes=N.map(n=>{const d=document.createElement('div');d.className='node';d.innerHTML='<i></i>'+n;stage.appendChild(d);return d});
+let a=0,v=.25,target=.25,last=performance.now();
+const place=()=>{const R=stage.clientWidth<440?39:42;
+  wg.setAttribute('transform',`rotate(${a*57.2958})`);
+  nodes.forEach((d,i)=>{const t=-a*.35+i*Math.PI*2/N.length;d.style.left=(50+R*Math.cos(t))+'%';d.style.top=(50+R*Math.sin(t))+'%'});
+};
+const kick=()=>{v=3.2};
+wheel.addEventListener('click',kick);
+wheel.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();kick()}});
+wheel.addEventListener('pointerenter',()=>target=.7);
+wheel.addEventListener('pointerleave',()=>target=.25);
+if(reduce){place()}
+else{const tick=now=>{const dt=Math.min(.05,(now-last)/1000);last=now;v+=(target-v)*Math.min(1,dt*1.2);a+=v*dt;place();requestAnimationFrame(tick)};requestAnimationFrame(tick)}
+
+let sv=0;
+{const hero=document.querySelector('.hero'),htxt=hero.querySelector('.wrap>div'),st=document.getElementById('stage'),root=document.documentElement,
+  proj=document.getElementById('projects'),tt=document.getElementById('totop'),links=[...document.querySelectorAll('nav .links a')],
+  secs=links.map(l=>document.querySelector(l.getAttribute('href')));
+ let ly=scrollY,rot=0,tick=false;
+ tt.addEventListener('click',()=>scrollTo({top:0,behavior:reduce?'auto':'smooth'}));
+ const upd=()=>{tick=false;const y=scrollY,dy=y-ly;ly=y;const max=root.scrollHeight-innerHeight;
+  root.style.setProperty('--sp',max>0?y/max:0);
+  tt.classList.toggle('show',y>innerHeight*.8);
+  let cur=-1;secs.forEach((sc,i)=>{if(sc&&sc.getBoundingClientRect().top<innerHeight*.4)cur=i});links.forEach((l,i)=>l.classList.toggle('on',i===cur));
+  if(reduce)return;
+  rot+=dy*.25;root.style.setProperty('--rot',rot);
+  a+=dy*.006;sv=Math.min(6,sv+Math.abs(dy)*.03);
+  const hh=hero.offsetHeight,k=Math.min(1,y/hh);
+  htxt.style.transform=`translateY(${y*.18}px)`;htxt.style.opacity=1-k*.9;
+  st.style.transform=`translateY(${y*.08}px) scale(${1-k*.18})`;
+ };
+ addEventListener('scroll',()=>{if(!tick){tick=true;requestAnimationFrame(upd)}},{passive:true});upd();
+ if(!reduce){const decay=()=>{sv*=.94;if(sv<.01)sv=0;requestAnimationFrame(decay)};requestAnimationFrame(decay)}
+}
+
+{const box=document.getElementById('infbox'),path=document.getElementById('infp'),g=document.getElementById('pk'),L=path.getTotalLength(),
+  stg=document.getElementById('stg'),stt=document.getElementById('stt');
+ const ST=[['Plan',.12,'Scrum sprints, backlog and sprint reviews'],['Code',.21,'Git branches, merge requests and code review'],['Build',.29,'Gradle builds and Docker container images'],['Test',.38,'GitLab CI and Jenkins pipelines'],
+   ['Release',.62,'Tagged commits pushed to the container registry'],['Deploy',.71,'Helm charts onto Kubernetes namespaces'],['Operate',.79,'Linux servers, KVM virtual machines and Azure'],['Monitor',.88,'Prometheus, Grafana and InfluxDB dashboards']];
+ const els=ST.map(([n,f])=>{const p=path.getPointAtLength(f*L),c=p.x<300?190:410,dx=p.x-c,dy=p.y-150,m=Math.hypot(dx,dy)||1,x=p.x+dx/m*44,y=p.y+dy/m*30;
+   const d=document.createElement('span');d.className='stl';d.textContent=n;d.style.left=((x+60)/720*100)+'%';d.style.top=(y/300*100)+'%';box.appendChild(d);return d});
+ const NS='http://www.w3.org/2000/svg',pk=[0,.34,.67].map((o,i)=>{const c=document.createElementNS(NS,'circle');c.setAttribute('r',i?5:8);c.setAttribute('fill',i?'#9db8f2':'#21c48f');g.appendChild(c);
+   const h=document.createElementNS(NS,'circle');h.setAttribute('r',i?10:18);h.setAttribute('fill',i?'rgba(157,184,242,.25)':'rgba(33,196,143,.3)');g.insertBefore(h,c);return {o,c,h}});
+ let t=0,cur=-1,lt=performance.now(),vis=false;
+ const setStage=i=>{if(i===cur)return;cur=i;els.forEach((e,j)=>e.classList.toggle('on',j===i));stg.textContent=ST[i][0];stt.textContent=ST[i][2]};
+ const draw=()=>{pk.forEach(k=>{const f=(t+k.o)%1,p=path.getPointAtLength(f*L);k.c.setAttribute('cx',p.x);k.c.setAttribute('cy',p.y);k.h.setAttribute('cx',p.x);k.h.setAttribute('cy',p.y)});
+   const f=t%1;let i=ST.length-1;for(let j=0;j<ST.length;j++){if(f>=ST[j][1]-.05)i=j}setStage(i)};
+ const loop=now=>{const dt=Math.min(.05,(now-lt)/1000);lt=now;t+=dt*.055*(1+sv*.6);draw();if(vis)requestAnimationFrame(loop)};
+ if(reduce){let i=0;draw();setStage(0);setInterval(()=>{i=(i+1)%ST.length;setStage(i)},2600)}
+ else{draw();new IntersectionObserver(es=>{const v=es[0].isIntersecting;if(v&&!vis){vis=true;lt=performance.now();requestAnimationFrame(loop)}else if(!v)vis=false}).observe(box)}
+}
+
+{const box=document.getElementById('flowbg'),cv=document.getElementById('fc'),cx=cv.getContext('2d');
+let W=0,H=0,nodes=[],edges=[],adj=[],pk=[],hubs=[],run=false,col='#326ce5';
+const rnd=(i)=>{const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)};
+const build=()=>{
+  const dpr=Math.min(1.5,devicePixelRatio||1);W=box.clientWidth;H=box.clientHeight;
+  cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0);col=getComputedStyle(cv).color;
+  nodes=[];const n=Math.max(18,Math.round(W*H/52000));
+  for(let i=0;i<n;i++){const edge=rnd(i*3)<.62;nodes.push({x:(edge?(rnd(i)<.5?rnd(i*7)*.22:.78+rnd(i*7)*.22):rnd(i*7))*W,y:rnd(i*11)*H,r:2.5+rnd(i*5)*3,ph:rnd(i*13)*6.28})}
+  hubs=[];const secs=[...box.querySelectorAll('section')];
+  secs.forEach((sec,k)=>{const y=sec.offsetTop+sec.offsetHeight;if(k<secs.length-1){const x=k%2?W*.06:W*.94;const h={x,y,r:Math.min(90,W*.09),hub:1,a:k};nodes.push(h);hubs.push(h)}});
+  edges=[];adj=nodes.map(()=>[]);const seen=new Set();
+  nodes.forEach((p,i)=>{const d=nodes.map((q,j)=>[j,(p.x-q.x)**2+(p.y-q.y)**2]).filter(e=>e[0]!==i).sort((a,b)=>a[1]-b[1]).slice(0,p.hub?4:2);
+    d.forEach(([j])=>{const k=i<j?i+'-'+j:j+'-'+i;if(!seen.has(k)){seen.add(k);edges.push([i,j]);adj[i].push(j);adj[j].push(i)}})});
+  pk=[];for(let i=0;i<Math.max(8,Math.round(edges.length/3));i++){const e=edges[i*7%edges.length];pk.push({a:e[0],b:e[1],t:rnd(i*17),v:.18+rnd(i*19)*.25})}
+};
+const helm=(x,y,r,a)=>{cx.save();cx.translate(x,y);cx.rotate(a);cx.lineWidth=Math.max(2,r*.07);
+  cx.beginPath();cx.arc(0,0,r,0,7);cx.stroke();cx.beginPath();cx.arc(0,0,r*.6,0,7);cx.lineWidth=r*.09;cx.stroke();
+  cx.beginPath();cx.arc(0,0,r*.22,0,7);cx.lineWidth=r*.07;cx.stroke();
+  for(let i=0;i<8;i++){cx.rotate(Math.PI/4);cx.beginPath();cx.moveTo(0,r*.22);cx.lineTo(0,r*.92);cx.lineWidth=r*.06;cx.stroke();cx.beginPath();cx.arc(0,r*.95,r*.08,0,7);cx.fill()}
+  cx.restore()};
+let last=performance.now(),T=0;
+const frame=(now)=>{const dt0=Math.min(.05,(now-last)/1000),dt=dt0*(1+sv);last=now;T+=dt;
+  cx.clearRect(0,0,W,H);cx.strokeStyle=col;cx.fillStyle=col;
+  cx.globalAlpha=.16;cx.setLineDash([4,7]);cx.lineDashOffset=-T*12;cx.lineWidth=1.4;cx.beginPath();
+  edges.forEach(([i,j])=>{const p=nodes[i],q=nodes[j];cx.moveTo(p.x,p.y);cx.lineTo(q.x,q.y)});cx.stroke();cx.setLineDash([]);
+  nodes.forEach(p=>{if(p.hub)return;cx.globalAlpha=.22+.12*Math.sin(T*1.5+p.ph);cx.beginPath();cx.arc(p.x,p.y,p.r,0,7);cx.fill()});
+  cx.globalAlpha=.14;hubs.forEach((h,k)=>helm(h.x,h.y,h.r,T*(k%2?-.12:.12)));
+  cx.globalAlpha=.9;cx.fillStyle='#21c48f';
+  pk.forEach(k=>{const p=nodes[k.a],q=nodes[k.b],len=Math.hypot(q.x-p.x,q.y-p.y)||1;k.t+=k.v*dt*260/len;
+    if(k.t>=1){const nx=adj[k.b].filter(j=>j!==k.a);k.a=k.b;k.b=nx.length?nx[Math.floor(Math.random()*nx.length)]:k.a===k.b?k.b:adj[k.b][0];k.t=0}
+    const x=p.x+(q.x-p.x)*k.t,y=p.y+(q.y-p.y)*k.t;cx.beginPath();cx.arc(x,y,3.6,0,7);cx.fill();
+    cx.globalAlpha=.25;cx.beginPath();cx.arc(x,y,8,0,7);cx.fill();cx.globalAlpha=.9});
+  cx.globalAlpha=1;if(run&&!reduce)requestAnimationFrame(frame)};
+build();frame(performance.now());
+new ResizeObserver(()=>{build();if(!run||reduce)frame(performance.now())}).observe(box);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',build);
+new MutationObserver(build).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+new IntersectionObserver(es=>{const v=es[0].isIntersecting;if(v&&!run){run=true;last=performance.now();if(!reduce)requestAnimationFrame(frame)}else if(!v)run=false}).observe(box);
+}
+
+}
+</script>
+</body>
+</html>
