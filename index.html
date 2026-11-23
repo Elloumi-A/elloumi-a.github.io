@@ -556,7 +556,7 @@ const openP=id=>{const p=P.find(x=>x.id===id);if(!p)return;lastFocus=document.ac
   const stack=`<section class="ms"><h4>Stack</h4><div class="tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div></section>`;
   const architecture=p.architecture?sec(p.architecture):'';
   const repoLink=p.repo?`<a class="repo-link" href="${p.repo}" target="_blank" rel="noopener">View project on GitHub <span aria-hidden="true">↗</span></a>`:'';
-  mb.innerHTML=p.sec.map(sec).join('')+stack+architecture+repoLink;
+  mb.innerHTML=p.sec.map(sec).join('')+architecture+stack+repoLink;
   md.classList.add('open');document.body.classList.add('lock');md.scrollTop=0;
   requestAnimationFrame(()=>requestAnimationFrame(()=>md.classList.add('grow')));
   document.getElementById('mclose').focus()};
