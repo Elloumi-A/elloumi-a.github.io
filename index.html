@@ -450,6 +450,7 @@ const P=[
   architecture:{h:'Architecture',diagram:gitopsDiagram},
   sec:[
    {h:'Description',p:'I built a repeatable way to ship a containerized Python app to two Kubernetes environments: Kind for local testing and K3s on an Azure VM for cloud validation.'},
+   {h:'Project goal',p:'Validate a repeatable release process from a code commit to a healthy Kubernetes deployment. Use Git as the source of truth so each release is traceable to a commit and Argo CD can correct drift from the desired state.'},
    {h:'Build and release',p:'GitHub Actions builds and smoke-tests the Docker image. Pushes to main publish it to GitHub Container Registry (GHCR) with the commit SHA as the image tag.'},
    {h:'Deploy with GitOps',p:'I promoted an image by committing its tag to the Helm values file. Argo CD watched the main branch, rendered the Helm chart and reconciled the application in both clusters. Each cluster pulled the image from GHCR.'},
    {h:'Verify locally and on Azure',p:'I verified the rollout and Argo CD self-healing on Kind. For the Azure lab, I provisioned an Ubuntu VM and its network with Terraform, ran K3s on the VM and checked the app and its /healthz endpoint. I tore down the Azure lab after verification.'}]},
